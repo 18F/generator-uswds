@@ -1,0 +1,41 @@
+---
+# The site navigation is stored in a separate YAML file from the site
+# configuration so that you can see changes on the Jekyll server
+# without having to restart it.
+
+primary:
+  sections:
+    - title: First section (basic)
+      links:
+        - href: /about/
+          text: About
+        - href: /jobs/
+          text: Jobs
+        - href: /legal/
+          text: Legal
+    - title: Second section (mega)
+      columns:
+        - links:
+            - href: javascript:void(0)
+              text: Link one
+            - href: javascript:void(0)
+              text: Link two
+            - href: javascript:void(0)
+              text: Link three
+        - links:
+            - href: javascript:void(0)
+              text: Link four
+            - href: javascript:void(0)
+              text: Link five
+            - href: javascript:void(0)
+              text: Link six
+
+secondary:
+  search:
+    action: /search/
+    param: q
+  links:
+    - href: javascript:void(0)
+      text: Secondary link
+    - href: javascript:void(0)
+      text: Another link
