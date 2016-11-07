@@ -7,16 +7,18 @@ const path = require('path');
 const pkg = require('../package.json');
 const spawn = require('child_process').spawn;
 
+const PACKAGE_JSON = 'package.json';
+
 const JEKYLL = 'Jekyll';
-const STATIC = 'Static';
 const NODE = 'Node.js';
 const RAILS = 'Ruby on Rails';
+const STATIC = 'Static';
 
 const LAYOUTS = [
-  STATIC,
   JEKYLL,
+  STATIC,
   NODE,
-  RAILS
+  // RAILS
 ];
 
 module.exports = yeoman.Base.extend({
@@ -30,25 +32,70 @@ module.exports = yeoman.Base.extend({
     this.log(yosay(
       'Welcome to the ' + chalk.red(pkg.name) + '!'
     ));
+  },
 
-    return this.prompt([
-        {
-          name: 'name',
-          message: 'What is your project called',
-          default: 'My cool project',
-          store: true
-        },
-        {
-          name: 'description',
-          message: 'Optionally, enter a one-sentence project description',
-          default: '',
-          store: true
+  configuring: {
+  },
+
+  writing: function () {
+    const layout = this.options.layout;
+    switch (layout) {
+
+      case JEKYLL:
+      case 'jekyll':
+        return this._setupJekyll();
+
+      case NODE:
+      case 'node':
+      case 'nodejs':
+        return this._setupNode();
+
+      default:
+        throw new Error('unknown layout: "' + layout + '"');
+    }
+  },
+
+  install: function() {
+    return fsp.exists(PACKAGE_JSON)
+      .then(exists => {
+        if (exists) {
+          if (this.options.layout === JEKYLL) {
+          }
         }
-      ])
-      .then(options => {
-        Object.assign(this.options, options);
-      })
-      .then(() => this._determineLayout());
+      });
+  },
+
+  end: function() {
+    switch (this.options.layout) {
+      case JEKYLL:
+      case 'jekyll':
+        return fsp.exists(PACKAGE_JSON)
+          .then(exists => {
+            this.log([
+              '',
+              "If you don't have Jekyll installed globally,",
+              "you can install it with Bundler:",
+              '',
+              chalk.bold('  bundle'),
+              '',
+              "then, run Jekyll via:",
+              '',
+              chalk.bold('  bundle exec jekyll serve'),
+              '',
+            ].join('\n'));
+
+            if (exists) {
+              this.log([
+                '',
+                'It looks like you are using Jekyll and Node',
+                '(because there is a package.json in this directory).',
+                '',
+                'You can add the above commands to your "scripts" portion',
+                'of your package.json.',
+              ].join('\n'));
+            }
+          });
+    }
   },
 
   _determineLayout: function () {
@@ -91,34 +138,14 @@ module.exports = yeoman.Base.extend({
 
   },
 
-  configuring: {
-  },
+  _setupNode: function() {
+    const deps = ['uswds'];
 
-  writing: function () {
-    const layout = this.options.layout;
-    switch (layout) {
-
-      case NODE:
-      case 'node':
-      case 'nodejs':
-        return this._scaffoldNode();
-
-      case JEKYLL:
-      case 'jekyll':
-        return this._scaffoldJekyll();
-
-      case RAILS:
-      case 'rails':
-      case 'ruby':
-        return this._scaffoldRails();
-
-      default:
-        throw new Error('unknown layout: "' + layout + '"');
+    if (this.options.layout === NODE) {
+      deps.push('node-sass');
     }
-  },
 
-  _scaffoldNode: function() {
-    return this.npmInstall(['uswds'], {
+    this.npmInstall(deps, {
       save: true
     });
   },
@@ -128,7 +155,7 @@ module.exports = yeoman.Base.extend({
     return this.fs.copy(path.join(base, from), to);
   },
 
-  _scaffoldJekyll: function () {
+  _setupJekyll: function () {
     var promises = [
 
       // Jekyll _config.yml
@@ -171,24 +198,6 @@ module.exports = yeoman.Base.extend({
     return Promise.all(promises);
   },
 
-  _scaffoldRuby: function () {
-    return this._gemInstall({
-      'us_web_design_standards': 'https://github.com/18F/us_web_design_standards_gem.git'
-    })
-    .then(() => {
-      // what now?
-    });
-  },
-
-  _scaffoldRails: function () {
-    return this._gemInstall({
-      'uswds-rails': 'https://github.com/18F/uswds-rails-gem.git'
-    })
-    .then(() => {
-      // what now?
-    });
-  },
-
   _spawn: function (command, args, opts) {
     return new Promise((resolve, reject) => {
       spawn(command, args, opts)
@@ -199,42 +208,22 @@ module.exports = yeoman.Base.extend({
     });
   },
 
-  _gemInstall: function (gems) {
-    const promises = Object.keys(gems).map(gem => {
-      const spec = gems[gem];
-      var args;
-      if (spec.indexOf('http') === 0) {
-        args = ['specific_install', spec];
-      } else {
-        args = ['install'];
-      }
-      return this._spawn('gem', args);
-    });
-
-    return Promise.all(promises);
-  },
-
   _guessLayout: function() {
 
-    var clues = {
-      '_config.yml':  'Jekyll',
-      'Rakefile':     'Rails',
-      'Gemfile':      'Ruby',
-      'package.json': 'Node',
+    const clues = {
+      '_config.yml':  JEKYLL,
+      'Gemfile':      RAILS,
+      'package.json': NODE,
     };
 
-    return Promise.all(
-      Object.keys(clues).map(file => {
+    const lookups = Object.keys(clues)
+      .map(file => {
         return fsp.exists(file)
           .then(exists => exists ? clues[file] : false);
-      })
-    )
-    .then(layouts => {
-      return layouts.reduce((guess, layout) => {
-        return guess || layout;
       });
-    });
 
+    return Promise.all(lookups)
+      .then(layouts => layouts.reduce((guess, layout) => guess || layout));
   },
 
 });
