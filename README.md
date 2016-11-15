@@ -1,5 +1,5 @@
 # generator-uswds
-A Yeoman generator for the U.S. Draft Web Design Standards!
+A [Yeoman] generator for the U.S. Draft Web Design Standards!
 
 # Install it
 This isn't published on npm yet, but for now you can install it with:
@@ -23,3 +23,6 @@ yo uswds
 ```
 
 Enjoy! :beers:
+
+
+[Yeoman]: http://yeoman.io/
