@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "scripts": {
+    "start": "http-server .",
+    "build": "npm run build:css",
+    "build:css": "node-sass sass/*.scss -o css --source-map css",
+    "watch:css": "npm run build:css -- --watch"
+  },
+  "dependencies": {
+    "uswds": "^0.13",
+    "http-server": "*"
+  }
+}

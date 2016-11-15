@@ -1,0 +1,14 @@
+// you can customize variables here, for instance:
+
+// to customize the font stack:
+// $font-sans: 'Helvetica Neue', Helvetica, arial, sans-serif;
+// $font-serif: Georgia, 'Times New Roman', serif;
+
+// or, to customize colors:
+// $color-primary: #00bc71;
+
+// these paths are relative to css/main.css
+$font-path: '../fonts/vendor/uswds';
+$image-path: '../images/vendor/uswds';
+
+@import 'vendor/uswds/all';
