@@ -26,11 +26,13 @@ module.exports = yeoman.Base.extend({
     });
 
     const prompts = [
+      /*
       {
         message: 'Would you like to use Sass to customize the Standards?',
         type: 'confirm',
         name: 'sass',
       }
+      */
     ];
 
     return this.prompt(prompts, {store: true})
@@ -74,7 +76,7 @@ module.exports = yeoman.Base.extend({
       dir('static', '.'),
       dir(source('dist/fonts'), 'fonts/vendor/uswds'),
       dir(source('dist/img'), 'images/vendor/uswds'),
-      dir(source('dist/js'), 'js/vendor/uswds'),
+      dir(source('dist/js'), 'js/vendor'),
     ];
 
     if (this.options.sass) {
@@ -96,6 +98,8 @@ module.exports = yeoman.Base.extend({
   },
 
   end: function() {
+    console.warn('Building your site...');
+    return this.spawnCommand('npm', ['run', 'build']);
   },
 
   _sourcePath: function(filename) {
