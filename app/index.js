@@ -99,7 +99,7 @@ module.exports = yeoman.Base.extend({
 
   end: function() {
     console.warn('Building your site...');
-    return this.spawnCommand('npm', ['run', 'build']);
+    return this.spawnCommandSync('npm', ['run', 'build']);
   },
 
   _sourcePath: function(filename) {
