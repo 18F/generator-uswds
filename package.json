@@ -3,7 +3,7 @@
   "description": "A Yeoman generator for the U.S. Draft Web Design Standards",
   "version": "0.0.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test/**/*.spec.js"
   },
   "keywords": [
     "yeoman-generator"
@@ -17,5 +17,9 @@
     "yeoman-generator": "^0.24.1",
     "yosay": "^1.2.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "mocha": "^3.1.2",
+    "yeoman-assert": "^2.2.1",
+    "yeoman-test": "^1.5.1"
+  }
 }
