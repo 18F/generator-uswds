@@ -84,10 +84,14 @@ module.exports = yeoman.Base.extend({
         dir(source('src/stylesheets'), dest('sass/vendor/uswds'))
       );
     } else {
+      /*
+      // we can't just use the dist files as-is because the font
+      // and image paths are wrong!
       tasks.push(
         dir(source('dist/css'), 'css/vendor/uswds'),
         rm(dest('sass'))
       );
+      */
     }
 
     return Promise.all(tasks);
@@ -98,8 +102,8 @@ module.exports = yeoman.Base.extend({
   },
 
   end: function() {
-    console.warn('Building your site...');
-    return this.spawnCommandSync('npm', ['run', 'build']);
+    // console.warn('Building your site...');
+    this.spawnCommandSync('npm', ['run', 'build']);
   },
 
   _sourcePath: function(filename) {
