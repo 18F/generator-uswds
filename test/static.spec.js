@@ -33,7 +33,9 @@ describe('static site layout', function() {
 
     // javascript
     'js/README.md',
+    'js/main.js',
     'js/vendor/uswds.js',
+    'js/vendor/uswds.min.js',
 
     // page templates
     'page-templates/README.md',
