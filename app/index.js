@@ -1,8 +1,10 @@
 'use strict';
 const chalk = require('chalk');
+const fs = require('fs');
+const path = require('path');
 const yeoman = require('yeoman-generator');
 const yosay = require('yosay');
-const path = require('path');
+
 const pkg = require('../package.json');
 
 module.exports = yeoman.Base.extend({
@@ -20,19 +22,23 @@ module.exports = yeoman.Base.extend({
 
   configuring: function() {
     Object.assign(this.options, {
-      name: 'My great project',
-      description: 'This is a description of my project',
+      jekyll: true,
       sass: true
     });
 
     const prompts = [
-      /*
+      {
+        message: 'Would you like to use Jekyll to generate your site?',
+        type: 'confirm',
+        name: 'jekyll',
+        default: true,
+      },
       {
         message: 'Would you like to use Sass to customize the Standards?',
         type: 'confirm',
         name: 'sass',
-      }
-      */
+        default: true,
+      },
     ];
 
     return this.prompt(prompts, {store: true})
@@ -41,65 +47,42 @@ module.exports = yeoman.Base.extend({
       });
   },
 
-  writing: function () {
-    const templateBase = 'static';
+  writing: function() {
+    // this.directory(this.templatePath('base'), '.');
 
-    const template = filename => {
-      return this.templatePath(path.join(templateBase, filename));
-    };
+    if (this.options.jekyll) {
 
-    const source = filename => this._sourcePath(filename);
+      this.directory(this.templatePath('jekyll'), '.');
+      if (this.options.sass) {
+        this.directory('jekyll-sass', '.');
+      }
 
-    const dest = filename => {
-      return filename
-        ? this.destinationPath(filename)
-        : this.destinationPath();
-    };
+    } else  {
 
-    const copy = (from, to) => {
-      this.fs.copy(from, to);
-    };
+      this.directory(this._sourcePath('dist'), 'assets/uswds');
+      this.directory(this.templatePath('static'), '.');
 
-    const dir = (from, to) => {
-      this.directory(from, to);
-    };
+      if (this.options.sass) {
+        this.directory('static-sass', '.');
+        this.fs.delete('package.ext.json');
+        const extensions = JSON.parse(
+          fs.readFileSync(
+            this.templatePath('static-sass/package.ext.json')
+          )
+        );
+        this.fs.extendJSON('package.json', extensions);
+      }
 
-    const rm = filename => {
-      this.fs.delete(filename);
-    };
-
-    const move = (from, to) => {
-      this.fs.move(from, to);
-    };
-
-    const tasks = [
-      dir('static', '.'),
-      dir(source('dist/fonts'), 'fonts/vendor/uswds'),
-      dir(source('dist/img'), 'images/vendor/uswds'),
-      dir(source('dist/js'), 'js/vendor'),
-    ];
-
-    if (this.options.sass) {
-      tasks.push(
-        dir(source('src/stylesheets'), dest('sass/vendor/uswds'))
-      );
-    } else {
-      tasks.push(
-        dir(source('dist/css'), 'css/vendor/uswds'),
-        rm(dest('sass'))
-      );
     }
-
-    return Promise.all(tasks);
   },
 
   install: function() {
-    return this.npmInstall();
+    // return this.npmInstall();
   },
 
   end: function() {
-    console.warn('Building your site...');
-    return this.spawnCommand('npm', ['run', 'build']);
+    // console.warn('Building your site...');
+    // return this.spawnCommand('npm', ['run', 'build']);
   },
 
   _sourcePath: function(filename) {
