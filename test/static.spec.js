@@ -21,6 +21,10 @@ describe('Static scaffolding', function() {
         });
     });
 
+    it('creates package.json', function() {
+      assert.file(this.path('package.json'));
+    });
+
   });
 
   describe('with Sass', function() {
@@ -36,6 +40,12 @@ describe('Static scaffolding', function() {
       const file = this.path('assets/sass/main.scss');
       assert.file(file);
       assert.fileContent(file, /@import.+uswds/, 'imports uswds');
+    });
+
+    it('updates package.json', function() {
+      const file = this.path('package.json');
+      assert.file(file);
+      assert.fileContent(file, /"uswds": "\^1\./, 'depends on uswds ^1.x');
     });
 
   });
