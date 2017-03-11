@@ -21,25 +21,25 @@ module.exports = yeoman.Base.extend({
   },
 
   configuring: function() {
-    Object.assign(this.options, {
-      jekyll: true,
-      sass: true
-    });
+    const prompts = [];
 
-    const prompts = [
-      {
+    if (this.options.jekyll === undefined) {
+      prompts.push({
         message: 'Would you like to use Jekyll to generate your site?',
         type: 'confirm',
         name: 'jekyll',
         default: true,
-      },
-      {
+      });
+    }
+
+    if (this.options.sass === undefined) {
+      prompts.push({
         message: 'Would you like to use Sass to customize the Standards?',
         type: 'confirm',
         name: 'sass',
         default: true,
-      },
-    ];
+      });
+    }
 
     return this.prompt(prompts, {store: true})
       .then(opts => {
