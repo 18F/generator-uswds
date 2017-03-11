@@ -52,7 +52,13 @@ module.exports = yeoman.Base.extend({
 
     if (this.options.jekyll) {
 
-      this.directory(this.templatePath('jekyll'), '.');
+      // XXX ensure that the git submodule metadata directory isn't
+      // copied over, which could be either messy or destructive
+      this.fs.copy([
+        this.templatePath('jekyll'),
+        '!.git',
+      ], '.');
+
       if (this.options.sass) {
         this.directory('jekyll-sass', '.');
       }

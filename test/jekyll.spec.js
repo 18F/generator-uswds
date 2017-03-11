@@ -12,6 +12,10 @@ describe('Jekyll scaffolding', function() {
       },
     }));
 
+    it('does NOT copy the .git directory', function() {
+      assert.noFile(this.path('.git'));
+    });
+
     describe('creates the requisite Jekyll files:', function() {
       ['_config.yml', 'Gemfile', 'Gemfile.lock']
         .forEach(file => {
