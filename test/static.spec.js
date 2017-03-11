@@ -48,6 +48,10 @@ describe('Static scaffolding', function() {
       assert.fileContent(file, /"uswds": "\^1\./, 'depends on uswds ^1.x');
     });
 
+    it('does NOT copy package.ext.json', function() {
+      assert.noFile(this.path('package.ext.json'));
+    });
+
   });
 
 });

@@ -56,10 +56,6 @@ describe('Jekyll scaffolding', function() {
       assert.fileContent(file, /@import.+uswds/, 'imports uswds');
     });
 
-    it('does NOT copy package.ext.json', function() {
-      assert.noFile(this.path('package.ext.json'));
-    });
-
   });
 
 });
