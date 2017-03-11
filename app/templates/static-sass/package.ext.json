@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "build:css": "node-sass assets/sass -o assets/css --source-map assets/css",
+    "watch:css": "npm run build:css -- --watch"
+  },
+  "dependencies": {
+    "node-sass": "*"
+  }
+}
