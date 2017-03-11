@@ -70,7 +70,11 @@ module.exports = yeoman.Base.extend({
 
       if (this.options.sass) {
         this.directory('static-sass', '.');
+
+        // XXX this file is not intended to be copied; it's used to
+        // "extend" the package.json config below
         this.fs.delete('package.ext.json');
+
         const extensions = JSON.parse(
           fs.readFileSync(
             this.templatePath('static-sass/package.ext.json')
@@ -83,7 +87,11 @@ module.exports = yeoman.Base.extend({
   },
 
   install: function() {
-    // return this.npmInstall();
+    /*
+    if (this.fs.exists('package.json')) {
+      this.npmInstall();
+    }
+    */
   },
 
   end: function() {
