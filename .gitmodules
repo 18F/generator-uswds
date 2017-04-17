@@ -1,0 +1,3 @@
+[submodule "app/templates/jekyll"]
+	path = app/templates/jekyll
+	url = https://github.com/18F/federalist-uswds-template.git

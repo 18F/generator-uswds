@@ -2,12 +2,10 @@
   "private": true,
   "scripts": {
     "start": "http-server .",
-    "build": "npm run build:css",
-    "build:css": "node-sass sass/*.scss -o css --source-map css",
-    "watch:css": "npm run build:css -- --watch"
+    "update-uswds": "rsync -avrC --delete node_modules/uswds/dist/ assets/uswds/"
   },
   "dependencies": {
-    "uswds": "^0.13",
-    "http-server": "*"
+    "http-server": "*",
+    "uswds": "^1.0.0"
   }
 }

@@ -7,8 +7,8 @@
 // or, to customize colors:
 // $color-primary: #00bc71;
 
-// these paths are relative to css/main.css
-$font-path: '../fonts/vendor/uswds';
-$image-path: '../images/vendor/uswds';
+// these paths are relative to assets/css/main.css
+$font-path: '../uswds/fonts';
+$image-path: '../uswds/img';
 
-@import 'vendor/uswds/all';
+@import 'uswds/all';
